@@ -6,7 +6,15 @@ const customData = require('./data.json');
 const Boards = () => {
     return (
         <view>
-            <Text>{customData.boards}</Text>
+            <div>{customData.boards.map(
+                boards => 
+                {return (
+                    <div key={ boards.id}>
+                        <p>{boards.name}</p>
+                        <p>{boards.thumbnailPhoto}</p>
+                    </div>
+                    )}
+            )}</div>
         </view>
     )
 }
