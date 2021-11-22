@@ -4,7 +4,7 @@ import {View, Text} from  'react-native';
 const HelloWorld = () => {
     return (
         <view>
-            <Text>Hello World g</Text>
+            <Text>Hello World </Text>
         </view>
     )
 }
