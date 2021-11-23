@@ -11,7 +11,7 @@ const Boards = () => {
                 {return (
                     <div key={ boards.id}>
                         <p>{boards.name}</p>
-                        <p><img src={boards.thumbnailPhoto}></img></p>
+                        <p><img style={{width : '150px', height : '150px'}} src={boards.thumbnailPhoto}></img></p>
                     </div>
                     )}
             )}</div>
