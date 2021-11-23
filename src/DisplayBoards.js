@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from  'react-native';
+import {StyleSheet, View, Text} from  'react-native';
 
 const customData = require('./data.json');
 
@@ -9,7 +9,7 @@ const Boards = () => {
             <div>{customData.boards.map(
                 boards => 
                 {return (
-                    <div key={ boards.id}>
+                    <div key={boards.id}>
                         <p>{boards.name}</p>
                         <p><img style={{width : '150px', height : '150px'}} src={boards.thumbnailPhoto}></img></p>
                     </div>
@@ -18,5 +18,8 @@ const Boards = () => {
         </view>
     )
 }
+
+const styles = StyleSheet.create({
+  });
 
 export default Boards;
