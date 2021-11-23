@@ -4,6 +4,8 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import Header from './src/Header' ;
 import Boards from './src/DisplayBoards';
+import Lists from './src/DisplayLists';
+import Tasks from './src/DisplayTasks'
 
 
 export default function App() {
@@ -11,6 +13,8 @@ export default function App() {
     <View style={styles.container}>
       <Header />
       <Boards />
+      <Lists />
+      <Tasks />
     </View>
   );
 }
