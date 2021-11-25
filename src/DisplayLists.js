@@ -1,6 +1,7 @@
 import React from 'react';
-import {View, Text} from  'react-native';
-
+import {View, Text, ProgressViewIOSComponent} from  'react-native';
+import Task from './taskfolder/DisplayTask';
+import List from './NewDisplayLists'
 
 const customData = require('./data.json');
 
@@ -19,27 +20,8 @@ const Lists = () => {
                             lists => { 
                                 if(lists.boardId == boards.id)
                                 return (
-                                <div style={{padding : '5px', background: lists.color, border: '1px solid black', margin: '0 0 5px 0'}} key={lists.id}>
-                                    <p style={{fontWeight : 'bold', textAlign: 'center'}}>{lists.name}</p>
-
-                                    <div>{customData.tasks.map(
-                                        tasks => {
-                                            if(tasks.listId == lists.id)
-                                            return(
-                                                <div style={{margin: '0 0 15px 0', border: '1px solid #cfcfcf'}} key={tasks.id}>
-                                                    <p>{tasks.name}</p>
-                                                    <p>{tasks.description}</p>
-                                                    <p>{tasks.isFinished}</p>
-                                                </div>
-                                            )
-                                        }
-                                    )}
-
-                                    </div>
-
-
-                                </div>
-                                )
+                                    <List getlist = {lists}/>
+                                    )
                             }
                         )}</div>
                     </div>
