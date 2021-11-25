@@ -1,35 +1,28 @@
 import React from 'react';
 import {View, Text, ProgressViewIOSComponent} from  'react-native';
 import Task from './taskfolder/DisplayTask';
-import List from './NewDisplayLists'
 
 const customData = require('./data.json');
 
-const Lists = () => {
-    return (
-        <view>
+const List = (props) => {
+    // displaytask = props.gettask;
+    return(
+        <View>
+            <div style={{padding : '5px', background: props.getlist.color, border: '1px solid black', margin: '0 0 5px 0'}} key={props.getlist.id}>
+                <p style={{fontWeight : 'bold', textAlign: 'center'}}>{props.getlist.name}</p>
 
-            {customData.boards.map(
-                boards => {
-                    {return (
-                    <div style={{padding : '15px', border: '1px solid black', margin: '25px'}} key={boards.id}>
-                        <p>{boards.name}</p>
-                        <p><img style={{width : '150px', height : '150px'}} src={boards.thumbnailPhoto}></img></p>
+                <div>{customData.tasks.map(
+                    tasks => {
+                        if(tasks.listId == props.getlist.id)
+                        return(
+                            <Task gettask = {tasks}/>
+                        )}
+                )}
 
-                        <div>{customData.lists.map(
-                            lists => { 
-                                if(lists.boardId == boards.id)
-                                return (
-                                    <List getlist = {lists}/>
-                                    )
-                            }
-                        )}</div>
-                    </div>
-                    )}
-                }
-            )}
-        </view>
-    )
-}
+                </div>
+            </div>
+        </View>
+    );
+};
 
-export default Lists;
+export default List;
