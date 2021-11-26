@@ -15,7 +15,7 @@ Here is how: https://docs.github.com/en/github/creating-cloning-and-archiving-re
 
 1. Switch to the project's root directory in terminal
 2. Install the dependencies by running `npm install`
-3. Once, 'npm install' is completed, run `exp start` to start the expo and react-native server
+3. Once, 'npm install' is completed, run `expo start` to start the expo and react-native server
 4. If it shows a QR code on the terminal as a result of 'exp start' command, then you are good to go!
 
 #### Mobile setup
