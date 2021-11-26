@@ -12,7 +12,6 @@ export default function App() {
     <View style={styles.container}>
       <Header />
       <Boards />
-      <CreateTask></CreateTask>
     </View>
   );
 }

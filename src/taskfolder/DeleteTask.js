@@ -1,13 +1,13 @@
-import React, { useState} from "react";
-import { CheckBox, Text, Button, StyleSheet, View } from "react-native";
+import React from "react";
+import {Button, StyleSheet, View } from "react-native";
 
 const customData = require('../data.json');
 
 const DeleteTask = (props) => {
     return(
-        <view>
-            <p>s</p>
-        </view>
+        <View>
+            <Button color = '#ff4949' title = 'Delete Task' onPress={() => customData.tasks.pop()}/>
+        </View>
     )
 }
 

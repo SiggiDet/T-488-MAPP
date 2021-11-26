@@ -4,11 +4,11 @@ import parseErrorStack from 'react-native/Libraries/Core/Devtools/parseErrorStac
 
 const Header = () => {
     return (
-        <view style = {{width: '100%', height: '100%', margin: 'top', backgroundcolor: '#fadadd', alignItems : 'center',flexDirection: 'row'}}>
-            <view>
+        <View style = {{margin: 'top', backgroundcolor: '#fadadd', alignItems : 'center',flexDirection: 'row'}}>
+            <View>
                 <Text style = {{color: "#51414F"}}>Toodler</Text>
-            </view>
-        </view>
+            </View>
+        </View>
     )
 }
 

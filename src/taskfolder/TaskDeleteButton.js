@@ -7,9 +7,9 @@ const customData = require('../data.json');
 
 const DeleteButton = (props) => {
     return(
-        <view>
+        <View>
             <Button title="Delete Button" color="#841584" accessibilityLabel="Learn more about this purple button" onPress ={DeleteTask}/>
-        </view>
+        </View>
     )
 }
 

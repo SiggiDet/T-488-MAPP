@@ -1,76 +1,122 @@
-import React from "react";
-import {Text, Button, StyleSheet, TextInput, View } from "react-native";
+import React, {useState} from "react";
+import {Text, Button, StyleSheet, TextInput, View, Modal, Pressable } from "react-native";
 
+const customData = require('../data.json');
 
 const CreateTask = (props) => {
-    const [Name, onChangeName] = React.useState("Type name of task");
-    const [Description, onChangeDescription] = React.useState("Type The description of the task");
-    const IsFinished = false;
+    const [modalVisible, setModalVisible] = useState(false);
+    const [TaskName, setTaskName] = useState('');
+    const [TaskDescription, setDescription] = useState('');
+    const [Tasks, setTasks] = useState(customData.tasks);
+  
+    function addTask(newTask){
 
-    return (
-      <View>
-          <div style={{padding : '5px', backgroundColor: 'LightBlue', border: '1px solid black', width: '495px', height: '125px'}}>
-            <View style={styles.TitleBox}>
-                <Text style={styles.Title}>Create Task</Text>
-            </View>
-            <View style = {styles.buttonBox}>
-                <Button style={styles.CreateButton}  title="Create" color="#4ee44e"></Button>
-                <Button style={styles.CancelButton}  title="Cancel" color="#e25444"></Button>
-            </View>
+      const newTasks = [...Tasks, newTask];
+      newTask.id = Tasks.length + 1;
+      setTasks(newTasks);
+    };
 
-            <View style = {styles.inputBox}>
-                <Text><TextInput style={styles.Nameinput} onChangeText={onChangeName} value={Name}/></Text>
-                <Text><TextInput style={styles.Descriptioninput} onChangeText={onChangeDescription} value={Description}/></Text>
-            </View>
-          </div>
-      </View>
-    )
-};
+    function onCreateTask(){
+      // TODO: Add error exception when name is not provided 
+      if (!TaskName) return
+      setModalVisible(!modalVisible)
+      addTask({
+          name: TaskName,
+          Description: TaskDescription,           // Fixed
+          isFinished: false,
+          ListId: 1
+      });
+      setTaskName('');
+  };
+
+    return (    
+        <View style={styles.centeredView}>
+            <Modal
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                setModalVisible(!modalVisible);
+                }}>
+
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>Create new Task</Text>
+    
+                        <TextInput style={styles.input} placeholder="New Task name" onChangeText={ setTaskName }/>
+                        <TextInput style={styles.inputDescription} placeholder="Description"  onChangeText={setDescription}/>
+    
+                        <Pressable style={[styles.button, styles.buttonClose]} onPress={onCreateTask}>
+                            <Text style={styles.textStyle}>Create</Text>
+                        </Pressable>
+
+                    </View>
+                </View>
+            </Modal>
+            <Pressable style={[styles.button, styles.buttonOpen]} onPress={() => setModalVisible(true)}>
+                <Text style={styles.textStyle}>Create Task</Text>
+            </Pressable>
+        </View>
+        );
+}
 
 const styles = StyleSheet.create({
-    TitleBox:{
-        float: 'left',
-        flexDirection: 'row'
+    container_boards: {
+        padding : 15, 
+        borderWidth: 1, 
+        margin: 5
     },
-    Title:{ 
-        fontSize: 15,
-        textAlign: 'Left',
-        fontWeight: 'bold'
+    centeredView: {
+      flex: 1,
+      alignItems: "center",
     },
-
-    buttonBox:{
-        float: 'right',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+    modalView: {
+      margin: 20,
+      backgroundColor: "white",
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5
     },
-    CreateButton:{
-        height: 5,
-        width: 50,
-        margin: 6,
+    button: {
+      borderRadius: 4,
+      padding: 10,
+      elevation: 2
     },
-    CancelButton:{
-        height: 3,
-        width: 50,
-        margin: 4,
+    buttonOpen: {
+      backgroundColor: "#54c9ff",
     },
-
-    inputBox:{
-        float: 'left',
-        height: 5,
-        margin: 10
+    buttonClose: {
+      backgroundColor: "#2196F3",
     },
-    Nameinput: {
-      height: 25,
-      margin: 4,
-      borderWidth: 1,
-      padding: 5,
+    textStyle: {
+      color: "white",
+      fontWeight: "bold",
+      textAlign: "center"
     },
-    Descriptioninput:{
+    modalText: {
+      marginBottom: 15,
+      textAlign: "center"
+    },
+    input: {
         height: 40,
-        margin: 4,
+        margin: 12,
         borderWidth: 1,
-        width: 400,
+        padding: 10
+      },
+    inputDescription:{
+        height: 40,
+        margin: 20,
+        borderWidth: 1,
+        padding: 10
     }
   });
 
-export default CreateTask;
+export default CreateTask
