@@ -1,19 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react";
+import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView } from "react-native";
 
 import Header from './src/Header' ;
-import Boards from './src/DisplayBoards';
-import Lists from './src/DisplayLists';
-import Tasks from './src/DisplayTasks'
+import Boards from './src/DisplayLists';
 
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Header />
-      <Lists />
-    </View>
+    <SafeAreaView style={styles.container}>
+      {/** <Header /> **/}
+      <Boards />
+    </SafeAreaView>
   );
 }
 
