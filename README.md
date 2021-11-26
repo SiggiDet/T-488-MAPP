@@ -39,5 +39,5 @@ For extra functionality following functions were added:
 | GitLab Username          | Student name                  |
 | ------------------------ | ----------------------------- |
 | @daddara                 | Arnar Már Brynjarsson         |
-| @@KypsLloyd              | Kypler Lloyd                  |
+| @KypsLloyd               | Kypler Lloyd                  |
 | @SiggiDet                | Sigurður Detlef               |
