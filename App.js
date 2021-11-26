@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView } from "react-native";
 
-import Header from './src/Header' ;
-import Boards from './src/DisplayLists';
+import Boards from './src/DisplayAllBoards';
 
 
 export default function App() {
   return (
     <SafeAreaView style={styles.container}>
-      {/** <Header /> **/}
       <Boards />
     </SafeAreaView>
   );
