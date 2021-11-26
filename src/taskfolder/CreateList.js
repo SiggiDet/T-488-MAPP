@@ -51,10 +51,10 @@ const CreateLists = () => {
                         style={styles.input} onChangeText={setListName} value={inputListName}
                         />
         
-                    <TextInput
+                    {/* <TextInput
                         placeholder="Choose Color"
                         style={styles.input} onChangeText={setListColor} value={inputListColor}
-                        />
+                        /> */}
 
                     <ColorPickerComponent/>
 

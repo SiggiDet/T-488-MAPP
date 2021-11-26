@@ -1,83 +1,63 @@
-import React from 'react'
-import { SketchPicker } from 'react-color'
-import reactCSS from 'reactcss'
+import React, { useState } from "react";
+import styled from "styled-components";
 
+const Container = styled.span`
+  display: inline-flex;
+  align-items: center;
+  width: 150px;
+  max-width: 150px;
+  padding: 4px 12px;
+  border: 1px solid #000000;
+  border-radius: 1px;
 
-class ColorPickerComponent extends React.Component {
-    
-    state = {
-      displayClrPkr: false,
-      color: {
-        r: '215',
-        g: '159',
-        b: '55',
-        a: '1',
-      },
-    };
- 
-    onClick = () => {
-        this.setState({ 
-          displayClrPkr: !this.state.displayClrPkr 
-        })
-    };
- 
-    stateClose = () => {
-      this.setState({ 
-        displayClrPkr: false 
-      })
-    };
- 
-    onChange = (color) => {
-        this.setState({ 
-          color: color.rgb 
-        })
-    };
- 
-    render() {
- 
-      const styles = reactCSS({
-        'default': {
-          color: {
-            width: '50px',
-            height: '20px',
-            borderRadius: '4px',
-            background: `rgba(${ this.state.color.r }, ${ this.state.color.g }, ${ this.state.color.b }, ${ this.state.color.a })`,
-          },
-          popover: {
-            position: 'absolute',
-            zIndex: '2',
-          },
-          cover: {
-            top: '0px',
-            right: '0px',
-            bottom: '0px',
-            left: '0px',
-            position: 'fixed',            
-          },
-          swatch: {
-            padding: '5px',
-            background: '#ffffff',
-            borderRadius: '3px',
-            cursor: 'pointer',
-            display: 'inline-block',
-            boxShadow: '0 0 0 2px rgba(0,0,0,.3)',
-          },          
-        },
-      });
- 
-      return (
-        <div>
-          <div style={ styles.swatch } onClick={ this.onClick }>
-            <div style={ styles.color } />
-          </div>
-          { this.state.displayClrPkr ? <div style={ styles.popover }>
-            <div style={ styles.cover } onClick={ this.stateClose }/>
-            <SketchPicker color={ this.state.color } onChange={ this.onChange } />
-          </div> : null }
- 
-        </div>
-      )
+  input[type="color"] {
+    margin-right: 8px;
+    -webkit-appearance: none;
+    border: none;
+    width: auto;
+    height: auto;
+    cursor: pointer;
+    background: none;
+    &::-webkit-color-swatch-wrapper {
+      padding: 0;
+      width: 14px;
+      height: 14px;
     }
-}
- 
-export default ColorPickerComponent
+    &::-webkit-color-swatch {
+      border: 1px solid #bfc9d9;
+      border-radius: 4px;
+      padding: 0;
+    }
+  }
+
+  input[type="text"] {
+    border: none;
+    width: 100%;
+    font-size: 14px;
+  }
+`;
+
+const ColorPicker = props => {
+  return (
+    <Container>
+      <input type="color" {...props} />
+      <input type="text" {...props} />
+    </Container>
+  );
+};
+
+export default function App() {
+    const [state, updateState] = useState("Choose Color");
+  
+    const handleInput = e => {
+      updateState(e.target.value);
+    };
+  
+    return (
+      <div className="App">
+        <ColorPicker onChange={handleInput} value={state} />
+      </div>
+    );
+  }
+
+
