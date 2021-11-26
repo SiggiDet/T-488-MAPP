@@ -10,6 +10,8 @@ import Edit_task_func from "./Functions/Task/EditTask";
 import Edit_board_func from "./Functions/Board/EditBoard";
 import Edit_list_func from "./Functions/List/EditList";
 
+import Notification_func from "./Functions/Notify/Notification";
+
 const customData = require('./data.json');
 
 var fixedBoardsLength = customData.boards.length
