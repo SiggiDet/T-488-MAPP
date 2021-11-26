@@ -5,8 +5,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import Header from './src/Header' ;
 import Boards from './src/DisplayBoards';
 import Lists from './src/DisplayLists';
-import Tasks from './src/DisplayTasks'
-
 
 export default function App() {
   return (

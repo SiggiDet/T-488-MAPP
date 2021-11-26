@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, Text, ProgressViewIOSComponent} from  'react-native';
 import Task from './taskfolder/DisplayTask';
+import DeleteList from './taskfolder/DeleteList'
+import EditList from './taskfolder/EditList'
 
 const customData = require('./data.json');
 
@@ -9,6 +11,7 @@ const List = (props) => {
     return(
         <View>
             <div style={{padding : '5px', background: props.getlist.color, border: '1px solid black', margin: '0 0 5px 0'}} key={props.getlist.id}>
+            <DeleteList/><EditList/>
                 <p style={{fontWeight : 'bold', textAlign: 'center'}}>{props.getlist.name}</p>
 
                 <div>{customData.tasks.map(
