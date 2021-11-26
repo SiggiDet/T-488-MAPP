@@ -13,7 +13,6 @@ const DeleteList= () => {
         setLists(deleteLists)
     }
     function onDeleteList(){
-        // TODO: Add error exception when name is not provided 
         setModalVisible(!modalVisible)
         deleteList({
             id: "",

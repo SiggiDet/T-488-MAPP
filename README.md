@@ -24,6 +24,16 @@ Here is how: https://docs.github.com/en/github/creating-cloning-and-archiving-re
 2. Scan the QR code shown on the terminal.
 3. Once the QR code is successfully scanned, it will take few seconds to load and render the app.
 
+#### Implementation
+
+All required parts of assignment description were implemented. 
+
+For extra functionality following functions were added:
+
+	1. Confirmation popup before deleting something. 
+ 	2. Colorpicker which unfortunately was not in the final version because it did not work as intended in phone simulator. It works in web view though. 
+ 	3. Custom splashscreen when app is opened.
+
 #### Group Members
 
 | GitLab Username          | Student name                  |

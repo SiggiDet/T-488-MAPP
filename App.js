@@ -1,17 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react";
+import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView } from "react-native";
 
-import Header from './src/Header' ;
-import Boards from './src/DisplayBoards';
-import Lists from './src/DisplayLists';
+import Boards from './src/DisplayAllBoards';
+
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Header />
+    <SafeAreaView style={styles.container}>
       <Boards />
-    </View>
+    </SafeAreaView>
   );
 }
 
