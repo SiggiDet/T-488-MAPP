@@ -17,8 +17,10 @@
     "react-dom": "17.0.1",
     "react-modal": "^3.14.4",
     "react-native": "0.64.3",
+    "react-native-color-picker": "^0.6.0",
     "react-native-dialog": "^9.2.0",
-    "react-native-web": "0.17.1"
+    "react-native-web": "0.17.1",
+    "styled-components": "^5.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
