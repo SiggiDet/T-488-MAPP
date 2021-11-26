@@ -30,9 +30,8 @@ All required parts of assignment description were implemented.
 
 For extra functionality following functions were added:
 
-	1. Confirmation popup before deleting something. 
- 	2. Colorpicker which unfortunately was not in the final version because it did not work as intended in phone simulator. It works in web view though. 
- 	3. Custom splashscreen when app is opened.
+ 	1. Custom splashscreen when app is opened.
+	2. Pop up for inputs
 
 #### Group Members
 
