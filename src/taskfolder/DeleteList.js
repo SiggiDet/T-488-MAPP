@@ -6,10 +6,29 @@ const customData = require('../data.json');
 const DeleteList= () => {
 
 
+    const [lists, setLists] = useState(customData.lists)
+
+    function deleteList(oldList){
+        const deleteLists = [...lists, oldList]
+        setLists(deleteLists)
+    }
+    function onDeleteList(){
+        // TODO: Add error exception when name is not provided 
+        setModalVisible(!modalVisible)
+        deleteList({
+            id: "",
+            name: "",
+            color: "",
+            boardId: ""                  
+        })
+    }
+    const [modalVisible, setModalVisible] = useState(false);
+        
+
 
 return (
     
-    <Pressable style={[styles.button, styles.buttonOpen]} onPress={() => setModalVisible(true)}>
+    <Pressable style={[styles.button, styles.buttonOpen]} onPress={onDeleteList}>
         <Text style={styles.textStyle}>Delete list</Text>
     </Pressable>
 )
