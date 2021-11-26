@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView } from "react-native";
 
-import Boards from './src/DisplayAllBoards';
-
+import Boards from './src/views';
 
 export default function App() {
   return (

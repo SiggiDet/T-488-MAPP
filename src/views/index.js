@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, Image, ScrollView, Dimensions, TextInput } from "react-native";
+import styles from "./styles"
 
-import Create_board_func from "./Functions/Create/CreateBoard";
-import Create_list_func from "./Functions/Create/CreateList";
-import Create_task_func from "./Functions/Create/CreateTask";
+import Create_board_func from "../components/Create/CreateBoard";
+import Create_list_func from "../components/Create/CreateList";
+import Create_task_func from "../components/Create/CreateTask";
 
-import Edit_board_func from "./Functions/Edit/EditBoard";
-import Edit_list_func from "./Functions/Edit/EditList";
-import Edit_task_func from "./Functions/Edit/EditTask";
+import Edit_board_func from "../components/Edit/EditBoard";
+import Edit_list_func from "../components/Edit/EditList";
+import Edit_task_func from "../components/Edit/EditTask";
 
-import Move_task_func from "./Functions/MoveTask";
+import Move_task_func from "../components/MoveTask";
 
-const customData = require('./data.json');
+const customData = require('../resources/data.json');
 const { height } = Dimensions.get('window')
  
 var fixedBoardsLength = customData.boards.length
@@ -199,115 +200,6 @@ const Boards = () => {
     )
 }
 
-const styles = StyleSheet.create({
-    container_boards: {
-        padding : 15, 
-        borderWidth: 1, 
-        margin: 5,
-    },
-    centeredView: {
-      flex: 1,
-      alignItems: "center",
-      marginTop: 75
-    },
-    modalView: {
-      margin: 20,
-      backgroundColor: "white",
-      borderRadius: 20,
-      padding: 35,
-      alignItems: "center",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5
-    },
 
-
-    createButton: {
-        borderRadius: 20,
-        padding: 12,
-        elevation: 2,
-        backgroundColor: "#00960f",
-        marginBottom: 15
-    },
-
-    deleteButton: {
-        borderRadius: 20,
-        padding: 7.5,
-        elevation: 2,
-        backgroundColor: "#ff2929",
-        marginBottom: 15
-    },
-
-    editButton: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2,
-        backgroundColor: "#47cbff",
-        marginBottom: 15
-    },
-
-    addButton: {
-        borderRadius: 20,
-        padding: 5,
-        elevation: 2,
-        backgroundColor: "#00960f",
-        marginBottom: 15
-    },
-
-    boardsInfo: {
-        alignItems: "center",
-        marginBottom: 30
-    },
-
-    boardName: {
-        fontSize: 25,
-        fontWeight: "bold",
-    },
-
-    oneList: {
-        padding : 15,
-        borderWidth: 1,
-        borderRadius: 15,
-        marginBottom: 15 
-    },
-
-    listName: {
-        marginTop: 50,
-        marginBottom: 15,
-        fontSize: 20,
-        textAlign: "center"
-    },
-
-
-
-
-
-    buttonOpen: {
-      backgroundColor: "#F194FF",
-    },
-    buttonClose: {
-      backgroundColor: "#a1e3ff",
-    },
-    textStyle: {
-      color: "white",
-      fontWeight: "bold",
-      textAlign: "center"
-    },
-    modalText: {
-      marginBottom: 15,
-      textAlign: "center"
-    },
-    input: {
-        height: 40,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10
-      }
-  });
 
 export default Boards;
