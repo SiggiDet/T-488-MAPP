@@ -13,7 +13,6 @@ const Boards = () => {
     const [lists, setLists] = useState(customData.lists)
     const [tasks, setTasks] = useState(customData.tasks)
 
-
     function addBoard(newBoard){
         const newBoards = [...boards, newBoard]
         fixedBoardsLength += 1
@@ -35,33 +34,63 @@ const Boards = () => {
         setTasks(newTasks)
     }
     
-    function editBoard(id, name){
+    function editBoard(id, name, photo){
         if (!boards) return
         const newBoards = boards.map(board => {
             if (board.id == id){
-                board.name = name
+                if (name != '')
+                    board.name = name
+                if (photo != '')
+                    board.thumbnailPhoto = photo    
             } 
             return board
         })
         setBoards(newBoards)
     }
 
-    function editList(id, name){
+    function editList(id, name, color){
         if (!lists) return
         const newLists = lists.map(list => {
             if (list.id == id){
-                list.name = name
-            } 
+                if (name != '')
+                    list.name = name
+                if (color != '')
+                    list.color = color 
+            }
             return list
         })
         setLists(newLists)
     }
 
-    function editTask(id, name){
+    function editTask(id, name, description){
         if (!tasks) return
         const newTasks = tasks.map(task => {
             if (task.id == id){
-                task.name = name
+                if (name != '')
+                    task.name = name
+                if (description != '')
+                    task.description = description 
+            } 
+            return task
+        })
+        setTasks(newTasks)
+    }
+
+    function moveTask(id, newListid){
+
+        let allListIDs = [] 
+
+        for (var i = 0; i < lists.length; i++){
+            allListIDs.push(lists[i].id)
+        }
+
+        if (!tasks) return
+
+        const newTasks = tasks.map(task => {
+            if (task.id == id){
+                if (newListid != null)
+                    if (allListIDs.includes(parseInt(newListid)))
+                        task.listId = newListid 
             } 
             return task
         })
@@ -83,6 +112,7 @@ const Boards = () => {
         setTasks(newTasks)
     }
 
+
     return (
         <ScrollView>
             <Create_board_func addBoard={addBoard} />
@@ -93,16 +123,18 @@ const Boards = () => {
                     <View style={styles.container_boards} key={boards.id}>
                         
                         <Pressable
-                            style={[styles.button, styles.buttonClose]}
+                            style={[styles.deleteButton]}
                             onPress={() => deleteBoard(boards.id)}>
-                            <Text style={styles.textStyle}>DELETE BOARD X</Text>
+                            <Text style={styles.textStyle}>DELETE BOARD</Text>
                         </Pressable>
 
                         <Edit_board_func id_of_board={boards.id} editBoard={editBoard} />
                         
-                        <Text style={{fontSize: 25}}>{boards.name}</Text>
-                        <Image style={{width: 350, height: 350}} 
-                                source={{uri: boards.thumbnailPhoto}}></Image>
+                        <View style={styles.boardsInfo}>
+                            <Text style={styles.boardName}>{boards.name}</Text>
+                            <Image style={{width: 350, height: 350}} 
+                                    source={{uri: boards.thumbnailPhoto}}></Image>
+                        </View>
                         
                         <Create_list_func id_of_board={boards.id} addList={addList} />
                         
@@ -110,34 +142,36 @@ const Boards = () => {
                             lists => {
                                 if(lists.boardId == boards.id)
                                 return(
-                                    <View key={lists.id} style={{padding : '5px', background: lists.color, border: '1px solid black', margin: '0 0 5px 0'}}>
+                                    <View key={lists.id} style={[styles.oneList, {backgroundColor: lists.color}]}>
                                         <Pressable
-                                            style={[styles.buttonClose , styles.button]}
+                                            style={[styles.deleteButton]}
                                             onPress={() => deleteList(lists.id)}>
-                                            <Text style={styles.textStyle}>DELETE LIST X</Text>
+                                            <Text style={styles.textStyle}>DELETE LIST</Text>
                                         </Pressable>
 
                                         <Edit_list_func id_of_list={lists.id} editList={editList} />
-                                        <Create_task_func id_of_list={lists.id} addTask={addTask} />
 
-                                        <Text style={{fontWeight : 'bold', textAlign: 'center'}}>{lists.name}</Text>
+                                        <Text style={[styles.listName]}>[{lists.id}] {lists.name}</Text>
+
+                                        <Create_task_func id_of_list={lists.id} addTask={addTask} />
 
                                         {tasks.map(
                                         tasks => {
                                             if(tasks.listId == lists.id)
                                             return(
-                                                <View key={tasks.id} style={{margin: '0 0 15px 0', border: '1px solid #cfcfcf'}}>
-
-                                                    <Edit_task_func id_of_task={tasks.id} editTask={editTask}/>
+                                                <View key={tasks.id} style={[styles.oneList, {backgroundColor: '#cf82ff'}]}>
 
                                                     <Pressable
-                                                        style={[styles.buttonClose , styles.button]}
+                                                        style={[styles.deleteButton]}
                                                         onPress={() => deleteTask(tasks.id)}>
-                                                        <Text style={styles.textStyle}>DELETE TASK X</Text>
+                                                        <Text style={styles.textStyle}>DELETE TASK</Text>
                                                     </Pressable>
 
-                                                    <Text>{tasks.name}</Text>
-                                                    <Text>{tasks.description}</Text>
+                                                    <Edit_task_func id_of_task={tasks.id} editTask={editTask}/>
+                                                    <Move_task_func id_of_task={tasks.id} moveTask={moveTask}/>
+                                                
+                                                    <Text style={styles.textStyle}>{tasks.name}</Text>
+                                                    <Text style={{textAlign: 'center'}}>{tasks.description}</Text>
                                                     <Text>{tasks.isFinished}</Text>
                                                 </View>
                                             )
@@ -158,6 +192,7 @@ const Boards = () => {
 const Create_board_func = ({addBoard}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [inputName, setInputName] = useState('')
+    const [inputPhotoURI, setPhotoURI] = useState('')
     
     console.log(inputName)
 
@@ -165,11 +200,18 @@ const Create_board_func = ({addBoard}) => {
         // TODO: Add error exception when name is not provided 
         if (!inputName) return
         setModalVisible(!modalVisible)
-        addBoard({
-            name: inputName,
-            thumbnailPhoto: "https://hbr.org/resources/images/article_assets/2021/11/Nov21_23_80602562-383x215.jpg"           // Fixed                   
-        })
+        if (inputPhotoURI == '')
+            addBoard({
+                name: inputName,
+                thumbnailPhoto: "https://www.kenyons.com/wp-content/uploads/2017/04/default-image-620x600.jpg"               
+            })
+        else   
+            addBoard({
+                name: inputName,
+                thumbnailPhoto: inputPhotoURI               
+            })
         setInputName('')
+        setPhotoURI('')
     }
       
     return (    
@@ -184,25 +226,40 @@ const Create_board_func = ({addBoard}) => {
         >
             <View style={styles.centeredView}>
             <View style={styles.modalView}>
-                <Text style={styles.modalText}>Create new Board</Text>
+                <Text style={styles.modalText}>Add Board</Text>
 
                 <TextInput
                     style={styles.input}
                     placeholder="New board name"
                     value={inputName}
                     onChangeText={setInputName}
-                  />
+                />
+
+                <TextInput
+                    style={styles.input}
+                    placeholder="URL for thumbnail"
+                    value={inputPhotoURI}
+                    onChangeText={setPhotoURI}
+                />
 
                 <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={onCreateBoard}
-                >
-                <Text style={styles.textStyle}>Create</Text>
+                    style={[styles.createButton]}
+                        onPress={onCreateBoard}
+                    >
+                    <Text style={styles.textStyle}>Create</Text>
                 </Pressable>
+
+                <Pressable
+                    style={[styles.deleteButton]}
+                        onPress={() => setModalVisible(false)}
+                    >
+                    <Text style={styles.textStyle}>Cancel</Text>
+                </Pressable>
+
             </View>
             </View>
         </Modal>
-        <Pressable style={[styles.button, styles.buttonOpen]} onPress={() => setModalVisible(true)}>
+        <Pressable style={[styles.createButton]} onPress={() => setModalVisible(true)}>
             <Text style={styles.textStyle}>Add Board</Text>
         </Pressable>
     </View>
@@ -211,13 +268,14 @@ const Create_board_func = ({addBoard}) => {
 
 const Edit_board_func = ({id_of_board, editBoard}) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [inputEdit, setInputEdit] = useState('')
+    const [inputNameEdit, setInputEdit] = useState('')
+    const [inputPhotoEdit, setPhotoInputEdit] = useState('')
 
     function onEditBoard(){
-        if (!inputEdit) return
         setModalVisible(!modalVisible)
-        editBoard(id_of_board, inputEdit)
+        editBoard(id_of_board, inputNameEdit, inputPhotoEdit)
         setInputEdit('')
+        setPhotoInputEdit('')
     }
 
     return (    
@@ -232,26 +290,41 @@ const Edit_board_func = ({id_of_board, editBoard}) => {
             >
                 <View style={styles.centeredView}>
                 <View style={styles.modalView}>
+
                     <Text style={styles.modalText}>Edit Board</Text>
     
                     <TextInput
                         style={styles.input}
                         placeholder="Enter new board name"
-                        value={inputEdit}
+                        value={inputNameEdit}
                         onChangeText={setInputEdit}
                       />
-    
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter new URL for photo"
+                        value={inputPhotoEdit}
+                        onChangeText={setPhotoInputEdit}
+                      />
+
+
                     <Pressable
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={onEditBoard}
-                    >
-                    <Text style={styles.textStyle}>Edit</Text>
+                        style={[styles.editButton]}
+                        onPress={onEditBoard}
+                        >
+                        <Text style={styles.textStyle}>Edit</Text>
                     </Pressable>
+                    <Pressable
+                        style={[styles.deleteButton]}
+                            onPress={() => setModalVisible(false)}
+                        >
+                        <Text style={styles.textStyle}>Cancel</Text>
+                    </Pressable>
+
                 </View>
                 </View>
             </Modal>
-            <Pressable style={[styles.button, styles.buttonOpen]} onPress={() => setModalVisible(true)}>
-                <Text style={styles.textStyle}>Edit Board</Text>
+            <Pressable style={[styles.editButton]} onPress={() => setModalVisible(true)}>
+                <Text style={styles.textStyle}>EDIT BOARD</Text>
             </Pressable>
         </View>
         );
@@ -260,16 +333,18 @@ const Edit_board_func = ({id_of_board, editBoard}) => {
 const Create_list_func = ({id_of_board, addList}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [inputNewList, setNewList] = useState('')
+    const [inputNewColorList, setNewColorList] = useState('')
 
     function onCreateList(){
         if (!inputNewList) return
         setModalVisible(!modalVisible)
         addList({
             name: inputNewList,
-            color: "#00ff00",
+            color: inputNewColorList,
             boardId: id_of_board
         })
         setNewList('')
+        setNewColorList('')
     }
 
     return (    
@@ -292,18 +367,32 @@ const Create_list_func = ({id_of_board, addList}) => {
                         value={inputNewList}
                         onChangeText={setNewList}
                       />
+                    
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter new color for list"
+                        value={inputNewColorList}
+                        onChangeText={setNewColorList}
+                      />
+                    
     
                     <Pressable
-                    style={[styles.button, styles.buttonClose]}
+                    style={[styles.createButton]}
                     onPress={onCreateList}
                     >
                     <Text style={styles.textStyle}>Add</Text>
                     </Pressable>
+                    <Pressable
+                        style={[styles.deleteButton]}
+                            onPress={() => setModalVisible(false)}
+                        >
+                        <Text style={styles.textStyle}>Cancel</Text>
+                    </Pressable>
                 </View>
                 </View>
             </Modal>
-            <Pressable style={[styles.button, styles.buttonOpen]} onPress={() => setModalVisible(true)}>
-                <Text style={styles.textStyle}>Add List</Text>
+            <Pressable style={[styles.addButton]} onPress={() => setModalVisible(true)}>
+                <Text style={styles.textStyle}>ADD LIST</Text>
             </Pressable>
         </View>
         );
@@ -312,12 +401,13 @@ const Create_list_func = ({id_of_board, addList}) => {
 const Edit_list_func = ({id_of_list, editList}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [inputEdit, setInputEdit] = useState('')
+    const [inputColorEdit, setInputColorEdit] = useState('')
 
     function onEditList(){
-        if (!inputEdit) return
         setModalVisible(!modalVisible)
-        editList(id_of_list, inputEdit)
+        editList(id_of_list, inputEdit, inputColorEdit)
         setInputEdit('')
+        setInputColorEdit('')
     }
 
     return (    
@@ -340,18 +430,31 @@ const Edit_list_func = ({id_of_list, editList}) => {
                         value={inputEdit}
                         onChangeText={setInputEdit}
                       />
+                    
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter new color"
+                        value={inputColorEdit}
+                        onChangeText={setInputColorEdit}
+                      />
     
                     <Pressable
-                    style={[styles.button, styles.buttonClose]}
+                    style={[styles.editButton]}
                     onPress={onEditList}
                     >
                     <Text style={styles.textStyle}>Edit</Text>
                     </Pressable>
+                    <Pressable
+                        style={[styles.deleteButton]}
+                            onPress={() => setModalVisible(false)}
+                        >
+                        <Text style={styles.textStyle}>Cancel</Text>
+                    </Pressable>
                 </View>
                 </View>
             </Modal>
-            <Pressable style={[styles.button, styles.buttonOpen]} onPress={() => setModalVisible(true)}>
-                <Text style={styles.textStyle}>Edit List</Text>
+            <Pressable style={[styles.editButton]} onPress={() => setModalVisible(true)}>
+                <Text style={styles.textStyle}>EDIT LIST</Text>
             </Pressable>
         </View>
         );
@@ -360,17 +463,19 @@ const Edit_list_func = ({id_of_list, editList}) => {
 const Create_task_func = ({id_of_list, addTask}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [inputNewTask, setNewTask] = useState('')
+    const [inputNewDescTask, setNewDescTask] = useState('')
 
     function onCreateTask(){
         if (!inputNewTask) return
         setModalVisible(!modalVisible)
         addTask({
             name: inputNewTask,
-            description: "Take a walk in the musem of Van Gogh!",
+            description: inputNewDescTask,
             isFinished: false,
             listId: id_of_list
         })
         setNewTask('')
+        setNewDescTask('')
     }
 
     return (    
@@ -389,21 +494,34 @@ const Create_task_func = ({id_of_list, addTask}) => {
     
                     <TextInput
                         style={styles.input}
-                        placeholder="Enter new list name"
+                        placeholder="Enter new task name"
                         value={inputNewTask}
                         onChangeText={setNewTask}
-                      />
+                    />
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter new description"
+                        value={inputNewDescTask}
+                        onChangeText={setNewDescTask}
+                    />
     
                     <Pressable
-                    style={[styles.button, styles.buttonClose]}
+                    style={[styles.createButton]}
                     onPress={onCreateTask}
                     >
                     <Text style={styles.textStyle}>Add</Text>
                     </Pressable>
+                    <Pressable
+                        style={[styles.deleteButton]}
+                            onPress={() => setModalVisible(false)}
+                        >
+                        <Text style={styles.textStyle}>Cancel</Text>
+                    </Pressable>
                 </View>
                 </View>
             </Modal>
-            <Pressable style={[styles.button, styles.buttonOpen]} onPress={() => setModalVisible(true)}>
+            <Pressable style={[styles.addButton]} onPress={() => setModalVisible(true)}>
                 <Text style={styles.textStyle}>Add Task</Text>
             </Pressable>
         </View>
@@ -413,12 +531,13 @@ const Create_task_func = ({id_of_list, addTask}) => {
 const Edit_task_func = ({id_of_task, editTask}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [inputEdit, setInputEdit] = useState('')
+    const [inputDescEdit, setInputDescEdit] = useState('')
 
     function onEditTask(){
-        if (!inputEdit) return
         setModalVisible(!modalVisible)
-        editTask(id_of_task, inputEdit)
+        editTask(id_of_task, inputEdit, inputDescEdit)
         setInputEdit('')
+        setInputDescEdit('')
     }
 
     return (    
@@ -433,7 +552,7 @@ const Edit_task_func = ({id_of_task, editTask}) => {
             >
                 <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Edit List</Text>
+                    <Text style={styles.modalText}>Edit Task</Text>
     
                     <TextInput
                         style={styles.input}
@@ -441,18 +560,86 @@ const Edit_task_func = ({id_of_task, editTask}) => {
                         value={inputEdit}
                         onChangeText={setInputEdit}
                       />
+                    
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter new description"
+                        value={inputDescEdit}
+                        onChangeText={setInputDescEdit}
+                      />
     
                     <Pressable
-                    style={[styles.button, styles.buttonClose]}
+                    style={[styles.editButton]}
                     onPress={onEditTask}
                     >
                     <Text style={styles.textStyle}>Edit</Text>
                     </Pressable>
+                    <Pressable
+                        style={[styles.deleteButton]}
+                            onPress={() => setModalVisible(false)}
+                        >
+                        <Text style={styles.textStyle}>Cancel</Text>
+                    </Pressable>
                 </View>
                 </View>
             </Modal>
-            <Pressable style={[styles.button, styles.buttonOpen]} onPress={() => setModalVisible(true)}>
-                <Text style={styles.textStyle}>Edit Task</Text>
+            <Pressable style={[styles.editButton]} onPress={() => setModalVisible(true)}>
+                <Text style={styles.textStyle}>EDIT TASK</Text>
+            </Pressable>
+        </View>
+        );
+}
+
+const Move_task_func = ({id_of_task, moveTask}) => {
+    const [modalVisible, setModalVisible] = useState(false);
+    const [inputMoveId, setInputMoveId] = useState('')
+
+    function onMoveTask(){
+        setModalVisible(!modalVisible)
+        moveTask(id_of_task, inputMoveId)
+        setInputMoveId('')
+    }
+
+    return (    
+        <View style={styles.textStyle}>
+            <Modal
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalText}>Move Task</Text>
+                    <Text style={[styles.modalText, {color: '#b3b3b3'}]}>Lists IDs can be found in front of list names</Text>
+    
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter list ID"
+                        value={inputMoveId}
+                        onChangeText={setInputMoveId}
+                      />
+                    
+    
+                    <Pressable
+                    style={[styles.editButton]}
+                    onPress={onMoveTask}
+                    >
+                    <Text style={styles.textStyle}>Move</Text>
+                    </Pressable>
+                    <Pressable
+                        style={[styles.deleteButton]}
+                            onPress={() => setModalVisible(false)}
+                        >
+                        <Text style={styles.textStyle}>Cancel</Text>
+                    </Pressable>
+                </View>
+                </View>
+            </Modal>
+            <Pressable style={[styles.editButton]} onPress={() => setModalVisible(true)}>
+                <Text style={styles.textStyle}>MOVE TASK</Text>
             </Pressable>
         </View>
         );
@@ -462,7 +649,7 @@ const styles = StyleSheet.create({
     container_boards: {
         padding : 15, 
         borderWidth: 1, 
-        margin: 5
+        margin: 5,
     },
     centeredView: {
       flex: 1,
@@ -484,16 +671,73 @@ const styles = StyleSheet.create({
       shadowRadius: 4,
       elevation: 5
     },
-    button: {
-      borderRadius: 20,
-      padding: 10,
-      elevation: 2
+
+
+    createButton: {
+        borderRadius: 20,
+        padding: 12,
+        elevation: 2,
+        backgroundColor: "#00960f",
+        marginBottom: 15
     },
+
+    deleteButton: {
+        borderRadius: 20,
+        padding: 7.5,
+        elevation: 2,
+        backgroundColor: "#ff2929",
+        marginBottom: 15
+    },
+
+    editButton: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+        backgroundColor: "#47cbff",
+        marginBottom: 15
+    },
+
+    addButton: {
+        borderRadius: 20,
+        padding: 5,
+        elevation: 2,
+        backgroundColor: "#00960f",
+        marginBottom: 15
+    },
+
+    boardsInfo: {
+        alignItems: "center",
+        marginBottom: 30
+    },
+
+    boardName: {
+        fontSize: 25,
+        fontWeight: "bold",
+    },
+
+    oneList: {
+        padding : 15,
+        borderWidth: 1,
+        borderRadius: 15,
+        marginBottom: 15 
+    },
+
+    listName: {
+        marginTop: 50,
+        marginBottom: 15,
+        fontSize: 20,
+        textAlign: "center"
+    },
+
+
+
+
+
     buttonOpen: {
       backgroundColor: "#F194FF",
     },
     buttonClose: {
-      backgroundColor: "#2196F3",
+      backgroundColor: "#a1e3ff",
     },
     textStyle: {
       color: "white",
@@ -511,6 +755,5 @@ const styles = StyleSheet.create({
         padding: 10
       }
   });
-
 
 export default Boards;
